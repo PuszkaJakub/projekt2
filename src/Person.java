@@ -1,7 +1,11 @@
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Set;
+import java.io.*;
+import java.util.Scanner;
+
 
 public class Person implements Serializable {
     private String name;
@@ -56,5 +60,22 @@ public class Person implements Serializable {
                     throw new IncestException(leftSideParent, this);
             }
         }
+    }
+
+    public static Person getPersonFromFile(String path) throws FileNotFoundException {
+        File file = new File(path);
+        Scanner scanner;
+        scanner = new Scanner(file);
+
+        String personName = scanner.nextLine();
+        LocalDate birthDate = LocalDate.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        LocalDate deathDate = null;
+        if(scanner.hasNextLine()){
+            deathDate = LocalDate.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        }
+
+        Person child = new Person(personName, birthDate, deathDate);
+
+        return child;
     }
 }
