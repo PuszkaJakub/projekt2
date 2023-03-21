@@ -1,11 +1,9 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Set;
-import java.io.*;
-import java.util.Scanner;
-
+import java.util.*;
 
 public class Person implements Serializable {
     private String name;
@@ -62,7 +60,8 @@ public class Person implements Serializable {
         }
     }
 
-    public static Person getPersonFromFile(String path) throws FileNotFoundException {
+    static List<TemporaryPerson> people = new ArrayList<>();
+    public static Person getPersonFromFile(String path) throws FileNotFoundException, AmbiousPersonException {
         File file = new File(path);
         Scanner scanner;
         scanner = new Scanner(file);
@@ -73,9 +72,14 @@ public class Person implements Serializable {
         if(scanner.hasNextLine()){
             deathDate = LocalDate.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         }
+        for(var person : people){
+            if(person.name.compareTo(personName)==0){
+                throw new AmbiousPersonException(personName, path, person.path);
+            }
+        }
+        people.add(new TemporaryPerson(personName, path));
 
-        Person child = new Person(personName, birthDate, deathDate);
+        return new Person(personName, birthDate, deathDate);
 
-        return child;
     }
 }

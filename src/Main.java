@@ -76,8 +76,9 @@ public class Main {
     public static void main(String[] args) {
         Person filePerson = null;
         try {
-            filePerson = Person.getPersonFromFile("test/test_same_osoby/Elżbieta Głaz.txt");
-        } catch (FileNotFoundException e) {
+            filePerson = Person.getPersonFromFile("test/test_same_osoby/Alicja Stefanek.txt");
+            filePerson = Person.getPersonFromFile("test/test_same_osoby/Alicja Stefanek2.txt");
+        } catch (FileNotFoundException | AmbiousPersonException e) {
             e.printStackTrace();
         }
         System.out.println(filePerson.toString());
