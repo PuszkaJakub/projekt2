@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -81,10 +82,35 @@ public class Person implements Serializable {
             if (sc.hasNextLine()) {
                 String firstPersonName = sc.nextLine();
                 firstPerson = findPerson(firstPersonName);
+                if(firstPerson != null){
+                    try {
+                        checkAge(firstPerson.birth, firstPerson.death, birthdayDate);
+                    }
+                    catch(ParentingAgeException e) {
+                        System.out.println("Czy dodac rodzica pomimo wyjatku? tak - y");
+                        Scanner userin = new Scanner(System.in);
+                        String answer = userin.nextLine();
+                        if(answer.compareTo("Y")!=0){
+                            firstPerson = null;
+                        }
+                }
+            }
+
                 if(sc.hasNextLine()) {
                     String secondPersonName = sc.nextLine();
-                    if (secondPersonName != null) {
-                        secondPerson = findPerson(secondPersonName);
+                    secondPerson = findPerson(secondPersonName);
+                    if(secondPerson != null){
+                        try {
+                            checkAge(secondPerson.birth, secondPerson.death, birthdayDate);
+                        }
+                        catch(ParentingAgeException e){
+                            System.out.println("Czy dodac rodzica pomimo wyjatku? tak - y");
+                            Scanner userin = new Scanner(System.in);
+                            String answer = userin.nextLine();
+                            if(answer.compareTo("Y")!=0){
+                                secondPerson = null;
+                            }
+                        }
                     }
                 }
             }
@@ -114,5 +140,13 @@ public class Person implements Serializable {
             people.add(getPersonFromFile(path));
         }
         return people;
+    }
+
+    public static void checkAge(LocalDate birth, LocalDate death, LocalDate childBirth) throws ParentingAgeException {
+        Period timeDiff = Period.between(birth, childBirth);
+        int previousDate = childBirth.compareTo(death);
+        if(timeDiff.getYears() < 15 || timeDiff.getYears() > 50 || previousDate < 0){
+            throw new ParentingAgeException();
+        }
     }
 }
