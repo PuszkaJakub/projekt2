@@ -74,13 +74,28 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        Person filePerson = null;
         try {
-            filePerson = Person.getPersonFromFile("test/test_same_osoby/Alicja Stefanek.txt");
-            filePerson = Person.getPersonFromFile("test/test_same_osoby/Alicja Stefanek2.txt");
-        } catch (FileNotFoundException | AmbiousPersonException e) {
+            ArrayList<String> paths = new ArrayList<>();
+            paths.add("test/test_rodzice/p1.txt");
+            paths.add("test/test_rodzice/p2.txt");
+            paths.add("test/test_rodzice/p3.txt");
+            paths.add("test/test_rodzice/p4.txt");
+            paths.add("test/test_rodzice/p5.txt");
+            paths.add("test/test_rodzice/p6.txt");
+            paths.add("test/test_rodzice/p7.txt");
+            paths.add("test/test_rodzice/p8.txt");
+            paths.add("test/test_rodzice/p9.txt");
+            paths.add("test/test_rodzice/p10.txt");
+            paths.add("test/test_rodzice/p11.txt");
+            List<Person> people = Person.getPeople(paths);
+            for (Person person : people) {
+                System.out.println(person);
+            }
+        } catch (FileNotFoundException | IncestException e) {
             e.printStackTrace();
+        } catch (AmbiousPersonException e) {
+            System.out.println(e.conflictPath1);
+            System.out.println(e.conflictPath2);
         }
-        System.out.println(filePerson.toString());
     }
 }

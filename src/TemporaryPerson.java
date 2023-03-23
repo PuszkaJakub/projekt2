@@ -1,9 +1,11 @@
+import java.io.File;
+
 public class TemporaryPerson{
-    public String name;
+    public Person person;
     public String path;
 
-    public TemporaryPerson(String name, String path) {
-        this.name = name;
+    public TemporaryPerson(Person person, String path) {
+        this.person = person;
         this.path = path;
     }
 
